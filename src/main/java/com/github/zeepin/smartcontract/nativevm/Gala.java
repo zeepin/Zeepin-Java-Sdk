@@ -395,7 +395,7 @@ public class Gala {
         if(address==null||address.equals("")){
             throw new SDKException(ErrorCode.ParamErr("address should not be null"));
         }
-        String unboundGalaStr = sdk.getConnect().getAllowance("Gala", Address.parse(GalaContract).toBase58(), address);
+        String unboundGalaStr = sdk.getConnect().getAllowance("Gala", Address.parse(ZPTContract).toBase58(), address);
         long unboundGala = Long.parseLong(unboundGalaStr);
         return unboundGalaStr;
     }
