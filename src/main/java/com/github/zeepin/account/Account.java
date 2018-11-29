@@ -422,11 +422,11 @@ public class Account {
         byte[] data = new byte[38];
         data[0] = (byte) 0x80;
         byte[] prikey = serializePrivateKey();
-	if (prikey.length < 32)
-            System.arraycopy(prikey, 0, data, 1 + 32 - prikey.length, prikey.length);
-	else
-            System.arraycopy(prikey, 0, data, 1, 32);
-	data[33] = (byte) 0x01;
+		if (prikey.length < 32)
+			System.arraycopy(prikey, 0, data, 1 + 32 - prikey.length, prikey.length);
+		else
+			System.arraycopy(prikey, 0, data, 1, 32);
+		data[33] = (byte) 0x01;
         byte[] checksum = Digest.hash256(data, 0, data.length - 4);
         System.arraycopy(checksum, 0, data, data.length - 4, 4);
         String wif = Base58.encode(data);
