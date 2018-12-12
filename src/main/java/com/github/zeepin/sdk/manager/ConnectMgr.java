@@ -142,6 +142,12 @@ public class ConnectMgr {
         }
         return false;
     }
+
+    public String sendRawTransactionString(String hexData) throws ConnectorException, IOException {
+        String rs = (String) connector.sendRawTransaction(hexData);
+
+        return rs;
+    }
     public boolean trySendRawTransaction(String hexData,int reSendTime) throws ConnectorException, IOException {
         boolean b = false;
         for(int i=0;i<reSendTime;i++) {

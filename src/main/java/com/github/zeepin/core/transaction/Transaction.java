@@ -57,7 +57,7 @@ public abstract class Transaction extends Inventory {
     public long gasPrice = 0;
     public long gasLimit = 0;
     public Address payer = new Address();
-    public Attribute[] attributes;
+    public byte attributes;
     public Sig[] sigs = new Sig[0];
     protected Transaction(TransactionType type) {
         this.txType = type;
@@ -124,12 +124,10 @@ public abstract class Transaction extends Inventory {
     }
 
     private void deserializeUnsignedWithoutType(BinaryReader reader) throws IOException {
-        try {
+        //try {
             deserializeExclusiveData(reader);
-            attributes = reader.readSerializableArray(Attribute.class);
-        } catch (InstantiationException | IllegalAccessException ex) {
-            throw new IOException(ex);
-        }
+            attributes = 1;
+
     }
 
     protected void deserializeExclusiveData(BinaryReader reader) throws IOException {
@@ -150,7 +148,8 @@ public abstract class Transaction extends Inventory {
         writer.writeLong(gasLimit);
         writer.writeSerializable(payer);
         serializeExclusiveData(writer);
-        writer.writeSerializableArray(attributes);
+        writer.writeByte(attributes);
+       // writer.writeSerializableArray(attributes);
     }
 
     protected void serializeExclusiveData(BinaryWriter writer) throws IOException {
@@ -196,7 +195,7 @@ public abstract class Transaction extends Inventory {
         json.put("GasPrice",gasPrice);
         json.put("GasLimit",gasLimit);
         json.put("Payer",payer.toBase58());
-        json.put("Attributes", Arrays.stream(attributes).map(p -> p.json()).toArray(Object[]::new));
+       // json.put("Attributes", Arrays.stream(attributes).map(p -> p.json()).toArray(Object[]::new));
         json.put("Sigs", Arrays.stream(sigs).map(p -> p.json()).toArray(Object[]::new));
         return json;
     }

@@ -37,7 +37,9 @@ package com.github.zeepin.smartcontract;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.zeepin.ZPTSdk;
+import com.github.zeepin.account.Account;
 import com.github.zeepin.common.ErrorCode;
+import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.transaction.Transaction;
 import com.github.zeepin.sdk.exception.SDKException;
 import com.github.zeepin.smartcontract.neovm.abi.AbiFunction;
@@ -111,5 +113,23 @@ public class WasmVm {
         Map result = new HashMap();
         result.put("Params",params);
         return JSON.toJSONString(result);
+    }
+
+    public String sendWasmTransaction(String method,String addr,Object[] inputarg,String payer,long gaslimit, long gas,Account account) throws Exception{
+        Constract constract = new Constract();
+        constract.setMethod(method);
+        constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));
+        constract.setAgrs(buildWasmContractJsonParam(inputarg));
+        Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);
+        sdk.signTx(tx,new Account[][]{{account}});
+
+
+        String result = sdk.getConnect().sendRawTransactionString(tx.toHexString());
+
+       // Transaction tx = sdk.vm().makeInvokeCodeTransaction(addr, null, constract.tobytes(), payer, gaslimit,gas);
+        return result;
+
+
+
     }
 }
