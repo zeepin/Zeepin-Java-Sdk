@@ -132,4 +132,24 @@ public class WasmVm {
 
 
     }
+
+    public String sendWasmTransactionPrepareExc(String method,String addr,Object[] inputarg,String payer,long gaslimit, long gas,Account account) throws Exception{
+        Constract constract = new Constract();
+        constract.setMethod(method);
+        constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));
+        constract.setAgrs(buildWasmContractJsonParam(inputarg));
+        Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);
+        sdk.signTx(tx,new Account[][]{{account}});
+
+
+        JSONObject result =(JSONObject) sdk.getConnect().sendRawTransactionPreExec(tx.toHexString());
+        String res = result.getString("Result");
+        return new String(Helper.hexToBytes(res));
+
+        // Transaction tx = sdk.vm().makeInvokeCodeTransaction(addr, null, constract.tobytes(), payer, gaslimit,gas);
+        //return result;
+
+
+
+    }
 }
