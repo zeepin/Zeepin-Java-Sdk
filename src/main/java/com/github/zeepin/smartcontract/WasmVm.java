@@ -152,12 +152,9 @@ public class WasmVm {
 
 
     }
-    public String sendWasmTransactionByManagement(String method,String addr,Object[] inputarg,String address,long gaslimit, long gas, Account account) throws Exception{
-    	String privatekey0 = "2cf804f021d94c33a3a288d6fc0d74f19854f6ef01de20f3ad8b19166b221d90"; 
-        Account acct0 = new Account(Helper.hexToBytes(privatekey0), sdk.defaultSignScheme);
-    	String payer = acct0.getAddressU160().toBase58(); 
-    	Address.decodeBase58(address);
+    public String sendWasmTransactionByOthersPay(String method,String addr,Object[] inputarg,long gaslimit, long gas, Account account,Account payaccount) throws Exception{
     	
+    	String payer = payaccount.getAddressU160().toBase58();
         Constract constract = new Constract();
         constract.setMethod(method);
         constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));
@@ -165,7 +162,7 @@ public class WasmVm {
         Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);
         
         sdk.signTx(tx, new Account[][]{{account}});
-        sdk.addMultiSign(tx, 1, new byte[][]{acct0.serializePublicKey()}, acct0);
+        sdk.addMultiSign(tx, 1, new byte[][]{payaccount.serializePublicKey()}, payaccount);
 
         String result = sdk.getConnect().sendRawTransactionString(tx.toHexString());
 
