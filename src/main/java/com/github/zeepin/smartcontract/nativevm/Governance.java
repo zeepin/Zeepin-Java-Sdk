@@ -429,6 +429,43 @@ public class Governance {
         return null;
     }
 
+
+    public String withdrawZPT(Account account,String peerPubkey[],long[] withdrawList,Account payerAcct,long gaslimit,long gasprice) throws Exception{
+        if(peerPubkey.length != withdrawList.length){
+            throw new SDKException(ErrorCode.ParamError);
+        }
+        Map map = new HashMap();
+        for(int i =0;i < peerPubkey.length;i++){
+            map.put(peerPubkey[i],withdrawList[i]);
+        }
+//        byte[] params = new VoteForPeerParam(account.getAddressU160(),peerPubkey,posList).toArray();
+//        Transaction tx = sdk.vm().makeInvokeCodeTransaction(contractAddress,"voteForPeer",params,payerAcct.getAddressU160().toBase58(),gaslimit,gasprice);
+
+        List list = new ArrayList();
+        Struct struct = new Struct();
+        struct.add(account.getAddressU160());
+        struct.add(peerPubkey.length);
+        for(int i =0; i< peerPubkey.length;i++){
+            struct.add(peerPubkey[i]);
+        }
+        struct.add(withdrawList.length);
+        for(int i =0; i< peerPubkey.length;i++){
+            struct.add(withdrawList[i]);
+        }
+        list.add(struct);
+        byte[] args = NativeBuildParams.createCodeParamsScript(list);
+        Transaction tx = sdk.vm().buildNativeParams(new Address(Helper.hexToBytes(contractAddress)),"withdraw",args,payerAcct.getAddressU160().toBase58(),gaslimit, gasprice);
+        sdk.signTx(tx,new Account[][]{{account}});
+        if(!account.equals(payerAcct)){
+            sdk.addSign(tx,payerAcct);
+        }
+        boolean b = sdk.getConnect().sendRawTransaction(tx.toHexString());
+        if (b) {
+            return tx.hash().toString();
+        }
+        return null;
+    }
+
     /**
      *
      * @param account
