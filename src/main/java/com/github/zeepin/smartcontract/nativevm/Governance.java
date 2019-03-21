@@ -429,7 +429,18 @@ public class Governance {
         return null;
     }
 
+/*
+ *	Account：发起退款的账号
+	peerPubkey: 被投票节点公钥（列表）
+	withdrawList: 需要取回ZPT数量（列表）
+	payerAccount:交易费用支付账号
 
+	通过getVoteInfo查询客户投票记录,
+	withdrawFreezePos 为冻结的投票数量,该部分要下个共识周期结束后可取,
+	withdrawUnFreezePos该部分为当前可取的投票数量。
+	
+	调用withdrawZPT 取回未冻结投票数量,投票给节点的票数，退回投票后要过两轮共识周期可取回。
+ 	*/
     public String withdrawZPT(Account account,String peerPubkey[],long[] withdrawList,Account payerAcct,long gaslimit,long gasprice) throws Exception{
         if(peerPubkey.length != withdrawList.length){
             throw new SDKException(ErrorCode.ParamError);
