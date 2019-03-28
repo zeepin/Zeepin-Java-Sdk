@@ -32,26 +32,26 @@ public class WASMprepare {
 
             List<String> arg1 = new ArrayList<>();
             arg1.add("haha");
-    //        arg1.add("eee");
-
+//    //        arg1.add("eee");
+//
             com.github.zeepin.account.Account  accountTest=ontSdk.getWalletMgr().getAccount("ZEuzshrCsE1cnvPuuRrDYgnVYNDtyt5d3X","11");
-           String b= accountTest.getAddressU160().toBase58();
+           String addr= accountTest.getAddressU160().toBase58();
             List<String> arg2 = new ArrayList<>();
             arg2.add("haha");
-
-         String testPreExc=   ontSdk.wasmvm().sendWasmTransactionPrepareExc("init","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),b,20000000,20000000,accountTest);
-           // String kkk=new String(Helper.hexToBytes(bbbpre.getString("Result")));
-         System.out.println(testPreExc);
-
-//          String bbb=   ontSdk.wasmvm().sendWasmTransaction("addStorage","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),b,20000000,20000000,accountTest);
-//         long kkkk=   ontSdk.nativevm().zpt().queryBalanceOf(accountTest.getAddressU160().toBase58());
-//         System.out.println(bbb);
-//         Thread.sleep(10*1000);
-//         String aaa= ontSdk.wasmvm().sendWasmTransaction("getStorage","acc8506f157d1175c02d19b76432f61c2b98be66",arg2.toArray(),b,20000000,20000000,accountTest);
 //
-//            System.out.println(aaa);
-//           JSONObject A =(JSONObject) ontSdk.getRestful().getSmartCodeEvent(aaa);
-//           System.out.println(A.toJSONString());
+//         String testPreExc=   ontSdk.wasmvm().sendWasmTransactionPrepareExc("init","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),b,20000000,20000000,accountTest);
+//           // String kkk=new String(Helper.hexToBytes(bbbpre.getString("Result")));
+//         System.out.println(testPreExc);
+
+          String bbb=   ontSdk.wasmvm().sendWasmTransaction("addStorage","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),addr,20000000,20000000,accountTest);
+         long kkkk=   ontSdk.nativevm().zpt().queryBalanceOf(accountTest.getAddressU160().toBase58());
+         System.out.println(bbb);
+         Thread.sleep(10*1000);
+         String aaa= ontSdk.wasmvm().sendWasmTransaction("getStorage","acc8506f157d1175c02d19b76432f61c2b98be66",arg2.toArray(),addr,20000000,20000000,accountTest);
+
+            System.out.println(aaa);
+           JSONObject A =(JSONObject) ontSdk.getRestful().getSmartCodeEvent(aaa);
+           System.out.println(A.toJSONString());
         } catch (Exception e) {
             e.printStackTrace();
         }

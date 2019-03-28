@@ -42,10 +42,10 @@ public enum TransactionType {
     Bookkeeper(0x02),
     Claim(0x03),
     Enrollment(0x04),
-    Vote(0x05),
-    DeployCode(0xd0),
-    InvokeCode(0xd1),
-    TransferTransaction(0x80),
+    Vote(0x05),                           
+    DeployCode(0xd0),                      //部署合约
+    InvokeCode(0xd1),                      //调用合约
+    TransferTransaction(0x80),             
     ;
 
     private byte value;

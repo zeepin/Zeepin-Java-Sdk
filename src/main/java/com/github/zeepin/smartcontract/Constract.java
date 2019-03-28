@@ -45,12 +45,16 @@ public class Constract {
     public byte[] tobytes(){
         byte[] a=new byte[1];
         a[0]=(byte)'1';
+        
         int lengthMethod=method.getBytes().length;
         byte[] lengthMethodBytes=intToBytes(lengthMethod);
+        
         int argsLength = agrs.length();
         byte[] argLenthBytes= intToBytes(argsLength);
+        
         int totalLengh=  1+conaddr.length+lengthMethodBytes.length+method.getBytes().length+argLenthBytes.length+argsLength;
         byte[] resultByte = new byte[totalLengh];
+        
         System.arraycopy(a,0,resultByte,0,1);
         System.arraycopy(conaddr,0,resultByte,1,conaddr.length);
         System.arraycopy(lengthMethodBytes,0,resultByte,conaddr.length+1,lengthMethodBytes.length);

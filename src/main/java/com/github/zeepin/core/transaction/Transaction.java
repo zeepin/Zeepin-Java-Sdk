@@ -96,6 +96,8 @@ public abstract class Transaction extends Inventory {
             throw new IOException(ex);
         }
     }
+    
+    //反序列化
     @Override
     public void deserialize(BinaryReader reader) throws IOException {
         deserializeUnsigned(reader);
@@ -106,6 +108,7 @@ public abstract class Transaction extends Inventory {
         }
     }
 
+    //反序列化参数
     @Override
     public void deserializeUnsigned(BinaryReader reader) throws IOException {
         txType = TransactionType.valueOf(reader.readByte());
@@ -133,12 +136,14 @@ public abstract class Transaction extends Inventory {
     protected void deserializeExclusiveData(BinaryReader reader) throws IOException {
     }
 
+    //序列化
     @Override
     public void serialize(BinaryWriter writer) throws IOException {
         serializeUnsigned(writer);
         writer.writeSerializableArray(sigs);
     }
 
+    //序列化参数
     @Override
     public void serializeUnsigned(BinaryWriter writer) throws IOException {
         writer.writeByte(version);

@@ -77,11 +77,13 @@ public class WasmVm {
             return tx.hash().toString();
         }
     }
+    
+    //将参数对象转化为Json字符串
     public String buildWasmContractJsonParam(Object[] objs) {
         List params = new ArrayList();
         for (int i = 0; i < objs.length; i++) {
             Object val = objs[i];
-            if (val instanceof String) {
+            if (val instanceof String) {      //判断该参数是否是String类型
                 Map map = new HashMap();
                 map.put("type","string");
                 map.put("value",val);
@@ -117,11 +119,11 @@ public class WasmVm {
 
     public String sendWasmTransaction(String method,String addr,Object[] inputarg,String payer,long gaslimit, long gas,Account account) throws Exception{
         Constract constract = new Constract();
-        constract.setMethod(method);
-        constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));
-        constract.setAgrs(buildWasmContractJsonParam(inputarg));
-        Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);
-        sdk.signTx(tx,new Account[][]{{account}});
+        constract.setMethod(method);                                         //存入合约调用方法
+        constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));       //将合约地址转成byte数组
+        constract.setAgrs(buildWasmContractJsonParam(inputarg));             //将合约参数序列化
+        Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);      //构造交易内容 ，constract.tobytes()将constract内容转为byte数组
+        sdk.signTx(tx,new Account[][]{{account}});                           //构造签名
 
 
         String result = sdk.getConnect().sendRawTransactionString(tx.toHexString());

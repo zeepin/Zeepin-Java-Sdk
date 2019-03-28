@@ -53,7 +53,7 @@ public class InvokeCode extends Transaction {
     public byte[] code;
 
     public InvokeCode() {
-        super(TransactionType.InvokeCode);
+        super(TransactionType.InvokeCode);          //交易类型：调用合约
     }
 
     @Override
