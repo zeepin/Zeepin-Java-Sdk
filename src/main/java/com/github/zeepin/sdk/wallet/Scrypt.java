@@ -39,7 +39,7 @@ import com.alibaba.fastjson.JSON;
 /**
  */
 public class Scrypt implements Cloneable{
-    private int n = 16384;
+    private int n = 1024;
     private int r = 8;
     private int p = 8;
     private int DkLen = 64;

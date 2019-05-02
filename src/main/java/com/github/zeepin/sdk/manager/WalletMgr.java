@@ -34,25 +34,25 @@
 
 package com.github.zeepin.sdk.manager;
 
+import com.alibaba.fastjson.JSON;
 import com.github.zeepin.common.Address;
 import com.github.zeepin.common.Common;
 import com.github.zeepin.common.ErrorCode;
 import com.github.zeepin.common.Helper;
-import com.github.zeepin.core.DataSignature;
-import com.github.zeepin.crypto.*;
-import com.github.zeepin.sdk.exception.*;
+import com.github.zeepin.crypto.Curve;
+import com.github.zeepin.crypto.ECC;
+import com.github.zeepin.crypto.SignatureScheme;
+import com.github.zeepin.sdk.exception.SDKException;
 import com.github.zeepin.sdk.info.AccountInfo;
 import com.github.zeepin.sdk.info.IdentityInfo;
-import com.github.zeepin.sdk.wallet.Account;
-import com.github.zeepin.sdk.wallet.Control;
-import com.github.zeepin.sdk.wallet.Identity;
-import com.github.zeepin.sdk.wallet.Wallet;
-import com.alibaba.fastjson.JSON;
+import com.github.zeepin.sdk.wallet.*;
 
 import java.io.*;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -256,6 +256,42 @@ public class WalletMgr {
             createAccount("", password);
         }
     }
+    public Account createCacheAccount(String password) throws Exception {
+        return createCacheAccount("", password, ECC.generateKey(16), ECC.generateKey());
+    }
+
+    private Account createCacheAccount(String label,String password,byte[] salt, byte[] prikey) throws Exception {
+        com.github.zeepin.account.Account account = new com.github.zeepin.account.Account(prikey, scheme);
+        Scrypt scrypt = new Scrypt();
+        Account acct;
+        switch (scheme) {
+            case SHA256WITHECDSA:
+                acct = new Account("ECDSA", new Object[]{Curve.P256.toString()}, "aes-256-gcm", "SHA256withECDSA", "sha256");
+                break;
+            case SM3WITHSM2:
+                acct = new Account("SM2", new Object[]{Curve.SM2P256V1.toString()}, "aes-256-gcm", "SM3withSM2", "sha256");
+                break;
+            default:
+                throw new SDKException(ErrorCode.OtherError("scheme type error"));
+        }
+        if (password != null) {
+            acct.key = account.exportGcmEncryptedPrikey(password,salt, scrypt.getN());
+            password = null;
+        } else {
+            acct.key = Helper.toHexString(account.serializePrivateKey());
+        }
+        acct.address = Address.addressFromPubKey(account.serializePublicKey()).toBase58();
+        if (label == null || label.equals("")) {
+            String uuidStr = UUID.randomUUID().toString();
+            label = uuidStr.substring(0, 8);
+        }
+        acct.label = label;
+        acct.setSalt(salt);
+        acct.setPublicKey(Helper.toHexString(account.serializePublicKey()));
+
+        return acct;
+    }
+
     public Account createAccount(String password) throws Exception {
         Account account = createAccount("", password);
         return account;
@@ -281,7 +317,9 @@ public class WalletMgr {
         info.addressU160 = acct.getAddressU160().toHexString();
         return info;
     }
-
+    public Account createCacheAccountFromPriKey(String password, String prikey) throws Exception {
+        return createCacheAccount("", password, ECC.generateKey(16), Helper.hexToBytes(prikey));
+    }
     public Account createAccountFromPriKey(String password, String prikey) throws Exception {
         AccountInfo info = createAccountInfo("",password, Helper.hexToBytes(prikey));
         return getWallet().getAccount(info.addressBase58);
@@ -361,7 +399,7 @@ public class WalletMgr {
         if (accountFlag) {
             for (Account e : walletInMem.getAccounts()) {
                 if (e.address.equals(acct.address)) {
-                    throw new SDKException(ErrorCode.ParamErr("wallet account exist"));
+                //    throw new SDKException(ErrorCode.ParamErr("wallet account exist"));
                 }
             }
             if (walletInMem.getAccounts().size() == 0) {
