@@ -399,7 +399,7 @@ public class WalletMgr {
         if (accountFlag) {
             for (Account e : walletInMem.getAccounts()) {
                 if (e.address.equals(acct.address)) {
-                //    throw new SDKException(ErrorCode.ParamErr("wallet account exist"));
+                    throw new SDKException(ErrorCode.ParamErr("wallet account exist"));
                 }
             }
             if (walletInMem.getAccounts().size() == 0) {
