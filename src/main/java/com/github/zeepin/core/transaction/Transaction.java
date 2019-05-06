@@ -89,6 +89,46 @@ public abstract class Transaction extends Inventory {
     		}
     	}
     }
+    
+    public static String getNativeFromAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(47);
+    				return reader.readSerializable(Address.class).toBase58();
+    			} catch (InstantiationException | IllegalAccessException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getNativeToAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(71);
+    				return reader.readSerializable(Address.class).toBase58();
+    			} catch (InstantiationException | IllegalAccessException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getNativeTransAmount(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(94);
+    				int len = (int) reader.readByte();
+    				return String.valueOf(Helper.BigIntFromNeoBytes(reader.readBytes(len)).intValue()/10000);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
 
     public static Transaction deserializeFrom(byte[] value) throws IOException {
         return deserializeFrom(value, 0);
