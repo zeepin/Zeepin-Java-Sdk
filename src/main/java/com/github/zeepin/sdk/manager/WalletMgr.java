@@ -217,9 +217,6 @@ public class WalletMgr {
         IdentityInfo info = new IdentityInfo();
         info.gid = Common.didzpt + Address.addressFromPubKey(acct.serializePublicKey()).toBase58();
         info.pubkey = Helper.toHexString(acct.serializePublicKey());
-        //这里要改，两个set并没有用
-//        info.setPrikey(Helper.toHexString(acct.serializePrivateKey()));
-//        info.setPriwif(acct.exportWif());
         info.encryptedPrikey = acct.exportGcmEncryptedPrikey(password, salt,walletFile.getScrypt().getN());
         info.addressU160 = acct.getAddressU160().toString();
         return info;
@@ -234,9 +231,6 @@ public class WalletMgr {
         IdentityInfo info = new IdentityInfo();
         info.gid = Common.didzpt + Address.addressFromPubKey(acct.serializePublicKey()).toBase58();
         info.pubkey = Helper.toHexString(acct.serializePublicKey());
-        //这里要改，两个set没有用
-//        info.setPrikey(Helper.toHexString(acct.serializePrivateKey()));
-//        info.setPriwif(acct.exportWif());
         info.encryptedPrikey = acct.exportGcmEncryptedPrikey(password, salt,walletFile.getScrypt().getN());
         info.addressU160 = acct.getAddressU160().toHexString();
         return info;
@@ -277,11 +271,9 @@ public class WalletMgr {
         AccountInfo info = new AccountInfo();
         info.addressBase58 = Address.addressFromPubKey(acct.serializePublicKey()).toBase58();
         info.pubkey = Helper.toHexString(acct.serializePublicKey());
-        //已修改
         info.setPrikey(Helper.toHexString(prikey));
         info.setPriwif(acct.exportWif(Helper.toHexString(prikey)));
         info.encryptedPrikey = acct.exportGcmEncryptedPrikey(password, salt,walletFile.getScrypt().getN());
-        System.out.println("encrypted:"+info.encryptedPrikey);
         info.addressU160 = acct.getAddressU160().toHexString();
         return info;
     }
@@ -356,8 +348,6 @@ public class WalletMgr {
             acct.key = account.exportGcmEncryptedPrikey(password,salt, walletFile.getScrypt().getN());
             password = null;
         } else {
-        	//这里修改过
-            //acct.key = Helper.toHexString(account.serializePrivateKey());
         	acct.key = Helper.toHexString(privateKey);
         }
         acct.address = Address.addressFromPubKey(account.serializePublicKey()).toBase58();
