@@ -267,8 +267,8 @@ public class Account {
     public PublicKey getPublicKey() {
         return publicKey;
     }
-
-    public PrivateKey getPrivateKey() {
+    //改成了private
+    private PrivateKey getPrivateKey() {
         return privateKey;
     }
 
@@ -385,8 +385,8 @@ public class Account {
                 throw new Exception(ErrorCode.UnknownKeyType);
         }
     }
-
-    public byte[] serializePrivateKey() throws Exception {
+    //改成了private
+    private byte[] serializePrivateKey() throws Exception {
         switch (this.keyType) {
             case ECDSA:
             case SM2:
@@ -417,8 +417,8 @@ public class Account {
 
         return pub0.length - pub1.length;
     }
-
-    public String exportWif() throws Exception {
+    //改成了private
+    private String exportWif() throws Exception {
         byte[] data = new byte[38];
         data[0] = (byte) 0x80;
         byte[] prikey = serializePrivateKey();
@@ -433,7 +433,23 @@ public class Account {
         Arrays.fill(data, (byte) 0);
         return wif;
     }
-
+    //新增，私钥方法
+    public String exportWif(String privateKey) throws Exception {
+        byte[] data = new byte[38];
+        data[0] = (byte) 0x80;
+        byte[] prikey = Helper.hexToBytes(privateKey);
+        if (prikey.length < 32)
+            System.arraycopy(prikey, 0, data, 1 + 32 - prikey.length, prikey.length);
+        else
+            System.arraycopy(prikey, 0, data, 1, 32);
+        data[33] = (byte) 0x01;
+        byte[] checksum = Digest.hash256(data, 0, data.length - 4);
+        System.arraycopy(checksum, 0, data, data.length - 4, 4);
+        String wif = Base58.encode(data);
+        Arrays.fill(data, (byte) 0);
+        return wif;
+    }
+    //不用改
     public String exportEcbEncryptedPrikey(String passphrase, int n) throws SDKException {
         int N = n;
         int r = 8;
@@ -469,7 +485,7 @@ public class Account {
         }
         return null;
     }
-
+    //不用改
     public String exportCtrEncryptedPrikey(String passphrase, int n) throws Exception {
         int N = n;
         int r = 8;
@@ -496,7 +512,7 @@ public class Account {
             throw new SDKException(ErrorCode.EncriptPrivateKeyError);
         }
     }
-
+    //不用改
     public String exportGcmEncryptedPrikey(String passphrase,byte[] salt, int n) throws Exception {
         int N = n;
         int r = 8;
@@ -523,12 +539,13 @@ public class Account {
             throw new SDKException(ErrorCode.EncriptPrivateKeyError);
         }
     }
-
+    //不用改
     public static String getCtrDecodedPrivateKey(String encryptedPriKey, String passphrase, String address, int n, SignatureScheme scheme) throws Exception {
         byte[] addresshashTmp = Digest.hash256(address.getBytes());
         byte[] addresshash = Arrays.copyOfRange(addresshashTmp, 0, 4);
         return getCtrDecodedPrivateKey(encryptedPriKey,passphrase,addresshash,n,scheme);
     }
+    //不用改
     public static String getCtrDecodedPrivateKey(String encryptedPriKey, String passphrase, byte[] salt, int n, SignatureScheme scheme) throws Exception {
         if (encryptedPriKey == null) {
             throw new SDKException(ErrorCode.EncryptedPriKeyError);
@@ -562,7 +579,7 @@ public class Account {
         }
         return Helper.toHexString(rawkey);
     }
-
+    //不用改
     public static String getGcmDecodedPrivateKey(String encryptedPriKey, String passphrase,String address, byte[] salt, int n, SignatureScheme scheme) throws Exception {
         if (encryptedPriKey == null) {
             throw new SDKException(ErrorCode.EncryptedPriKeyError);

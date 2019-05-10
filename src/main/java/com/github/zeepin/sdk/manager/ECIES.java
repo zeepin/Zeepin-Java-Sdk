@@ -118,7 +118,9 @@ public class ECIES {
         if (params.length != 3) {
             throw new Exception(ErrorCode.ParamError);
         }
-        return Decrypt(account.serializePrivateKey(), Helper.hexToBytes(params[0]), Helper.hexToBytes(params[1]), Helper.hexToBytes(params[2]), 32);
+    //修改过
+    //    return Decrypt(account.serializePrivateKey(), Helper.hexToBytes(params[0]), Helper.hexToBytes(params[1]), Helper.hexToBytes(params[2]), 32);
+        return Decrypt(account.serializePublicKey(), Helper.hexToBytes(params[0]), Helper.hexToBytes(params[1]), Helper.hexToBytes(params[2]), 32);
     }
 
     public static byte[] Decrypt(String prikey, String[] params) throws Exception {
@@ -140,7 +142,9 @@ public class ECIES {
             ECDomainParameters ecDomain = new ECDomainParameters(spec.getCurve(), spec.getG(), spec.getN());
             AsymmetricCipherKeyPair keys = new AsymmetricCipherKeyPair(
                     null,
-                    new ECPrivateKeyParameters(((BCECPrivateKey) account.getPrivateKey()).getD(), ecDomain));
+                    //修改过
+                    //new ECPrivateKeyParameters(((BCECPrivateKey) account.getPrivateKey()).getD(), ecDomain));
+            		new ECPrivateKeyParameters(((BCECPrivateKey) account.getPublicKey()).getD(), ecDomain));
 
             byte[] out = key_cxt;
             ECIESKeyEncapsulation kem = new ECIESKeyEncapsulation(new KDF2BytesGenerator(new SHA1Digest()), new SecureRandom());

@@ -217,8 +217,9 @@ public class WalletMgr {
         IdentityInfo info = new IdentityInfo();
         info.gid = Common.didzpt + Address.addressFromPubKey(acct.serializePublicKey()).toBase58();
         info.pubkey = Helper.toHexString(acct.serializePublicKey());
-        info.setPrikey(Helper.toHexString(acct.serializePrivateKey()));
-        info.setPriwif(acct.exportWif());
+        //这里要改，两个set并没有用
+//        info.setPrikey(Helper.toHexString(acct.serializePrivateKey()));
+//        info.setPriwif(acct.exportWif());
         info.encryptedPrikey = acct.exportGcmEncryptedPrikey(password, salt,walletFile.getScrypt().getN());
         info.addressU160 = acct.getAddressU160().toString();
         return info;
@@ -233,8 +234,9 @@ public class WalletMgr {
         IdentityInfo info = new IdentityInfo();
         info.gid = Common.didzpt + Address.addressFromPubKey(acct.serializePublicKey()).toBase58();
         info.pubkey = Helper.toHexString(acct.serializePublicKey());
-        info.setPrikey(Helper.toHexString(acct.serializePrivateKey()));
-        info.setPriwif(acct.exportWif());
+        //这里要改，两个set没有用
+//        info.setPrikey(Helper.toHexString(acct.serializePrivateKey()));
+//        info.setPriwif(acct.exportWif());
         info.encryptedPrikey = acct.exportGcmEncryptedPrikey(password, salt,walletFile.getScrypt().getN());
         info.addressU160 = acct.getAddressU160().toHexString();
         return info;
@@ -275,9 +277,11 @@ public class WalletMgr {
         AccountInfo info = new AccountInfo();
         info.addressBase58 = Address.addressFromPubKey(acct.serializePublicKey()).toBase58();
         info.pubkey = Helper.toHexString(acct.serializePublicKey());
-        info.setPrikey(Helper.toHexString(acct.serializePrivateKey()));
-        info.setPriwif(acct.exportWif());
+        //已修改
+        info.setPrikey(Helper.toHexString(prikey));
+        info.setPriwif(acct.exportWif(Helper.toHexString(prikey)));
         info.encryptedPrikey = acct.exportGcmEncryptedPrikey(password, salt,walletFile.getScrypt().getN());
+        System.out.println("encrypted:"+info.encryptedPrikey);
         info.addressU160 = acct.getAddressU160().toHexString();
         return info;
     }
@@ -310,7 +314,7 @@ public class WalletMgr {
 
     public String privateKeyToWif(String privateKey) throws Exception {
         com.github.zeepin.account.Account act = new com.github.zeepin.account.Account(Helper.hexToBytes(privateKey), scheme);
-        return act.exportWif();
+        return act.exportWif(privateKey);
     }
     public com.github.zeepin.account.Account getAccount(String address, String password) throws Exception {
         return getAccount(address, password,getWallet().getAccount(address).getSalt());
@@ -326,9 +330,10 @@ public class WalletMgr {
         com.github.zeepin.account.Account acc = getAccountByAddress(Address.decodeBase58(address), password,salt);
         info.addressBase58 = address;
         info.pubkey = Helper.toHexString(acc.serializePublicKey());
-        info.setPrikey(Helper.toHexString(acc.serializePrivateKey()));
         info.encryptedPrikey = acc.exportGcmEncryptedPrikey(password,salt, walletFile.getScrypt().getN());
-        info.setPriwif(acc.exportWif());
+        String prikey = acc.getGcmDecodedPrivateKey(info.encryptedPrikey, password, address, salt, walletFile.getScrypt().getN(), acc.getSignatureScheme());
+        info.setPrikey(prikey);
+        info.setPriwif(acc.exportWif(prikey));
         info.addressU160 = acc.getAddressU160().toString();
         return info;
     }
@@ -351,7 +356,9 @@ public class WalletMgr {
             acct.key = account.exportGcmEncryptedPrikey(password,salt, walletFile.getScrypt().getN());
             password = null;
         } else {
-            acct.key = Helper.toHexString(account.serializePrivateKey());
+        	//这里修改过
+            //acct.key = Helper.toHexString(account.serializePrivateKey());
+        	acct.key = Helper.toHexString(privateKey);
         }
         acct.address = Address.addressFromPubKey(account.serializePublicKey()).toBase58();
         if (label == null || label.equals("")) {

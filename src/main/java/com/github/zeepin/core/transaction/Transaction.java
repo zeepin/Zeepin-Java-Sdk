@@ -63,6 +63,33 @@ public abstract class Transaction extends Inventory {
         this.txType = type;
     }
 
+    public static Transaction deserializeTxString(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try {
+    				byte ver = reader.readByte();
+    				TransactionType type = TransactionType.valueOf(reader.readByte());
+    	            String typeName = "com.github.zeepin.core.payload." + type.toString();
+    	            Transaction transaction = (Transaction) Class.forName(typeName).newInstance();
+    	            transaction.version = ver;
+    	            transaction.nonce = reader.readInt();
+    	            transaction.gasPrice = reader.readLong();
+    	            transaction.gasLimit = reader.readLong();
+    	            transaction.payer = reader.readSerializable(Address.class);
+    	            transaction.deserializeExclusiveData(reader);
+    	            transaction.attributes = reader.readByte();
+    	            transaction.sigs = new Sig[(int) reader.readVarInt()];   	            
+    	            for (int i = 0; i < transaction.sigs.length; i++) {
+    	                transaction.sigs[i] = reader.readSerializable(Sig.class);
+    	            }            
+    	            return transaction;
+    			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
     public static Transaction deserializeFrom(byte[] value) throws IOException {
         return deserializeFrom(value, 0);
     }
