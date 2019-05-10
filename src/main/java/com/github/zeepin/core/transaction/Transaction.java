@@ -35,6 +35,7 @@
 package com.github.zeepin.core.transaction;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.*;
 
@@ -61,6 +62,120 @@ public abstract class Transaction extends Inventory {
     public Sig[] sigs = new Sig[0];
     protected Transaction(TransactionType type) {
         this.txType = type;
+    }
+    
+    public static String getNativeFromAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(47);
+    				return reader.readSerializable(Address.class).toBase58();
+    			} catch (InstantiationException | IllegalAccessException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getNativeToAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(71);
+    				return reader.readSerializable(Address.class).toBase58();
+    			} catch (InstantiationException | IllegalAccessException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getNativeTransAmount(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(94);
+    				int len = (int) reader.readByte();
+    				double amount = (double) Helper.BigIntFromNeoBytes(reader.readBytes(len)).intValue();
+    				DecimalFormat format = new DecimalFormat("#.####");
+    				return format.format(amount/10000);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmContractAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(44);
+    				String con = Helper.toHexString(reader.readBytes(20));
+    				return Helper.reverse(con);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmFromAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(111);
+    				byte[] fromAddr = reader.readBytes(34);
+    				return new String(fromAddr);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmToAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(174);
+    				byte[] toAddr = reader.readBytes(34);
+    				return new String(toAddr);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmTransAmount(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms1 = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader1 = new BinaryReader(ms1)) {
+    			try { 				
+    				reader1.readBytes(237);
+    				int len = 0;
+    				String mark = new String(reader1.readBytes(1));
+    				for(int i = 0; i < 30; i++) {
+    					if(mark.equals("\""))
+    						break;
+    					else {
+    						mark = new String(reader1.readBytes(1));
+    						len++;
+    					}
+    				}
+    				try (ByteArrayInputStream ms2 = new ByteArrayInputStream(value, 0, value.length)) {
+    					try (BinaryReader reader2 = new BinaryReader(ms2)) {
+        					reader2.readBytes(237);
+        					double amount = Double.parseDouble(new String(reader2.readBytes(len)));
+            				DecimalFormat format = new DecimalFormat("#.####");
+            				return format.format(amount/10000);
+        				}    					
+    				}    									
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
     }
 
     public static Transaction deserializeTxString(byte[] value) throws IOException {
@@ -123,6 +238,8 @@ public abstract class Transaction extends Inventory {
             throw new IOException(ex);
         }
     }
+    
+    //反序列化
     @Override
     public void deserialize(BinaryReader reader) throws IOException {
         deserializeUnsigned(reader);
@@ -133,6 +250,7 @@ public abstract class Transaction extends Inventory {
         }
     }
 
+    //反序列化参数
     @Override
     public void deserializeUnsigned(BinaryReader reader) throws IOException {
         txType = TransactionType.valueOf(reader.readByte());
@@ -160,12 +278,14 @@ public abstract class Transaction extends Inventory {
     protected void deserializeExclusiveData(BinaryReader reader) throws IOException {
     }
 
+    //序列化
     @Override
     public void serialize(BinaryWriter writer) throws IOException {
         serializeUnsigned(writer);
         writer.writeSerializableArray(sigs);
     }
 
+    //序列化参数
     @Override
     public void serializeUnsigned(BinaryWriter writer) throws IOException {
         writer.writeByte(version);

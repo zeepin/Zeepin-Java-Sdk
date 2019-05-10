@@ -56,11 +56,11 @@ public class AccountDemo {
             ZPTSdk zptSdk = getZPTSdk();
             
             com.github.zeepin.account.Account acct = new com.github.zeepin.account.Account(zptSdk.defaultSignScheme);
-            acct.serializePrivateKey();//私钥
+            //acct.serializePrivateKey();//私钥
             acct.serializePublicKey();//公钥
             acct.getAddressU160().toBase58();//base58地址
             
-            System.out.println("it's acct.serializePrivateKey():"+acct.serializePrivateKey());
+            //System.out.println("it's acct.serializePrivateKey():"+acct.serializePrivateKey());
             System.out.println("it's acct.serializePublicKey():"+acct.serializePublicKey());
             System.out.println("it's acct.getAddressU160().toBase58():"+acct.getAddressU160().toBase58());
             

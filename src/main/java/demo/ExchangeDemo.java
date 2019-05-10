@@ -196,7 +196,8 @@ public class ExchangeDemo {
             String id1 = "id1";
             Account acct1 = new Account(zptSdk.defaultSignScheme);
             String pubkey =  acct1.getAddressU160().toBase58();
-            byte[] privkey = acct1.serializePrivateKey();
+        //    byte[] privkey = acct1.serializePrivateKey();
+            byte[] privkey = acct1.serializePublicKey();
             printlog("++++ public key is " + acct1.getAddressU160().toBase58());
 
             UserAcct usr =getNewUserAcct(id1,pubkey,privkey,BigInteger.valueOf(0),BigInteger.valueOf(0));

@@ -71,7 +71,7 @@ public class GovernanceDemo {
 //            prikey = "523c5fcf74823831756f0bcb3634234f10b3beb1c05595058534577752ad2d9f";
             String adminPrivateKey = "957419a5ceaf5bd40e83e0fc59e71b0d7fef68149e3ea99f79149afc441549cd";
             Account adminZPTIdAcct = getAccount("FbB9GrorxmLn7AgX6d5+/hhp6zGb7OwXzYYhbPuCqy8NvMJgTlAaRNUa4yfcG0Wf","passwordtest","AMAx993nE6NEqZjwBssUfopxnnvTdob9ij","W3i7TqkbdQ6OQineVzL47A==");
-            adminPrivateKey =Helper.toHexString(adminZPTIdAcct.serializePrivateKey());
+          //  adminPrivateKey =Helper.toHexString(adminZPTIdAcct.serializePrivateKey());
             String adminPrivateKey2 = "ca53fa4f53ed175e39da86f4e02cd87638652cdbdcdae594c81d2e2f2f673745";
             Account account = new Account(Helper.hexToBytes(prikey),SignatureScheme.SHA256WITHECDSA);
             Account account8 = new Account(Helper.hexToBytes(privatekey8),SignatureScheme.SHA256WITHECDSA);

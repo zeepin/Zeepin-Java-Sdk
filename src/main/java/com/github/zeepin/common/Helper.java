@@ -56,6 +56,7 @@ public class Helper {
         return sb.substring(1);
     }
 
+    //将byte数组反序排列
     public static byte[] reverse(byte[] v) {
         byte[] result = new byte[v.length];
         for (int i = 0; i < v.length; i++) {
@@ -113,6 +114,7 @@ public class Helper {
         return new BigInteger(bs);
     }
 
+    //将十六进制字符转byte数组
     public static byte[] hexToBytes(String value) {
         if (value == null || value.length() == 0) {
             return new byte[0];

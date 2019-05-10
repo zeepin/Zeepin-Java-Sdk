@@ -116,17 +116,18 @@ public class Vm {
         }
         return tx;
     }
+    
     public InvokeCode makeInvokeCodeTransactionWasm(String codeAddr,String method,byte[] params, String payer,long gaslimit,long gasprice) throws SDKException {
        /* params = Helper.addBytes(params,new byte[]{0x67});
         params = Helper.addBytes(params, Address.parse(codeAddr).toArray());*/
         InvokeCode tx = new InvokeCode();
-        tx.attributes = 1;
-        tx.nonce = new Random().nextInt();
+        tx.attributes = 1;                        
+        tx.nonce = new Random().nextInt();        //设置随机数
         tx.code = params;
         tx.gasLimit = gaslimit;
         tx.gasPrice = gasprice;
         if(payer != null){
-            tx.payer = Address.decodeBase58(payer.replace(Common.didzpt,""));
+            tx.payer = Address.decodeBase58(payer.replace(Common.didzpt,""));            //检查地址，将GID前缀的地址去掉前缀，然后将地址解码
         }
         return tx;
     }

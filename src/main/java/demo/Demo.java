@@ -64,8 +64,8 @@ public class Demo {
             System.out.println(zeepinSdk.getConnect().getAllowance("zpt","from","to"));
             System.out.println(zeepinSdk.getConnect().getSmartCodeEvent("00d9336a5e83754815fdd609f7ecce31135428d4fcc40469082658cfdb8b62c4"));
             com.github.zeepin.account.Account acct11M = new com.github.zeepin.account.Account(zeepinSdk.defaultSignScheme);
-            String prikey111=(  Helper.toHexString( acct11M.serializePrivateKey()));
-            System.out.println(prikey111);
+       //     String prikey111=(  Helper.toHexString( acct11M.serializePrivateKey()));
+         //   System.out.println(prikey111);
 //            System.out.println(Helper.toHexString(zptSdk.getConnect().getBlock(1).transactions[0].sigs[0].sigData[0]));
             System.out.println(zeepinSdk.getConnect().getBlock(15));
 
