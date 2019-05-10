@@ -90,6 +90,25 @@ public abstract class Transaction extends Inventory {
     	}
     }
     
+    public static boolean isNative(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try {
+    				reader.readBytes(94);
+    				int len = (int) reader.readByte();
+    				reader.readBytes(len+38);
+    				byte[] ss = reader.readBytes(28);
+    				if(new String(ss).equals("ZeepinChain.Native.Invoke"))
+    					return true;
+    				else
+    					return false;    				
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
     public static String getNativeFromAddr(byte[] value) throws IOException {
     	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
     		try (BinaryReader reader = new BinaryReader(ms)) {
@@ -122,7 +141,7 @@ public abstract class Transaction extends Inventory {
     			try { 				
     				reader.readBytes(94);
     				int len = (int) reader.readByte();
-    				double amount = (double) Helper.BigIntFromNeoBytes(reader.readBytes(len)).intValue();
+    				double amount = Double.parseDouble(Helper.BigIntFromNeoBytes(reader.readBytes(len)).toString());
     				DecimalFormat format = new DecimalFormat("#.####");
     				return format.format(amount/10000);
     			} catch (IOException ex) {
