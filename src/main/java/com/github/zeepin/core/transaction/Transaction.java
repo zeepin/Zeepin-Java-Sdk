@@ -122,7 +122,81 @@ public abstract class Transaction extends Inventory {
     			try { 				
     				reader.readBytes(94);
     				int len = (int) reader.readByte();
-    				return String.valueOf(Helper.BigIntFromNeoBytes(reader.readBytes(len)).intValue()/10000);
+    				double amount = (double) Helper.BigIntFromNeoBytes(reader.readBytes(len)).intValue();
+    				DecimalFormat format = new DecimalFormat("#.####");
+    				return format.format(amount/10000);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmContractAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(44);
+    				String con = Helper.toHexString(reader.readBytes(20));
+    				return Helper.reverse(con);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmFromAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(111);
+    				byte[] fromAddr = reader.readBytes(34);
+    				return new String(fromAddr);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmToAddr(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try { 				
+    				reader.readBytes(174);
+    				byte[] toAddr = reader.readBytes(34);
+    				return new String(toAddr);
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static String getWasmTransAmount(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms1 = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader1 = new BinaryReader(ms1)) {
+    			try { 				
+    				reader1.readBytes(237);
+    				int len = 0;
+    				String mark = new String(reader1.readBytes(1));
+    				for(int i = 0; i < 30; i++) {
+    					if(mark.equals("\""))
+    						break;
+    					else {
+    						mark = new String(reader1.readBytes(1));
+    						len++;
+    					}
+    				}
+    				try (ByteArrayInputStream ms2 = new ByteArrayInputStream(value, 0, value.length)) {
+    					try (BinaryReader reader2 = new BinaryReader(ms2)) {
+        					reader2.readBytes(237);
+        					double amount = Double.parseDouble(new String(reader2.readBytes(len)));
+            				DecimalFormat format = new DecimalFormat("#.####");
+            				return format.format(amount/10000);
+        				}    					
+    				}    									
     			} catch (IOException ex) {
     	            throw new IOException(ex);
     	        }
