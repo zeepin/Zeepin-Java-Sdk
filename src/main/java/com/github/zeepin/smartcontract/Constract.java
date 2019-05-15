@@ -2,12 +2,13 @@ package com.github.zeepin.smartcontract;
 
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class Constract {
     private byte version;
     private byte[] conaddr;
-    private  String  agrs;
+    private  String  args;
     private   String method;
 
     public byte getVersion() {
@@ -26,12 +27,12 @@ public class Constract {
         this.conaddr = conaddr;
     }
 
-    public String getAgrs() {
-        return agrs;
+    public String getArgs() {
+        return args;
     }
 
-    public void setAgrs(String agrs) {
-        this.agrs = agrs;
+    public void setArgs(String args) {
+        this.args = args;
     }
 
     public String getMethod() {
@@ -49,19 +50,23 @@ public class Constract {
         int lengthMethod=method.getBytes().length;
         byte[] lengthMethodBytes=intToBytes(lengthMethod);
         
-        int argsLength = agrs.length();
+        int argsLength = args.getBytes().length;
         byte[] argLenthBytes= intToBytes(argsLength);
         
         int totalLengh=  1+conaddr.length+lengthMethodBytes.length+method.getBytes().length+argLenthBytes.length+argsLength;
         byte[] resultByte = new byte[totalLengh];
         
+        try {
         System.arraycopy(a,0,resultByte,0,1);
         System.arraycopy(conaddr,0,resultByte,1,conaddr.length);
         System.arraycopy(lengthMethodBytes,0,resultByte,conaddr.length+1,lengthMethodBytes.length);
         System.arraycopy(method.getBytes(),0,resultByte,conaddr.length+lengthMethodBytes.length+1,method.length());
         System.arraycopy(argLenthBytes,0,resultByte,conaddr.length+lengthMethodBytes.length+method.length()+1,argLenthBytes.length);
-        System.arraycopy(agrs.getBytes(),0,resultByte,conaddr.length+lengthMethodBytes.length+method.length()+argLenthBytes.length+1,agrs.getBytes().length);
-
+        System.arraycopy(args.getBytes("UTF-8"),0,resultByte,conaddr.length+lengthMethodBytes.length+method.length()+argLenthBytes.length+1,args.getBytes("UTF-8").length);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
       //  System.arraycopy();
         return resultByte;
@@ -105,7 +110,7 @@ public class Constract {
     public static void main(String[] args) {
         Constract constract = new Constract();
         constract.method ="1";
-        constract.agrs="012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
+        constract.args="012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
         constract.version=1;
         constract.conaddr="00000000000000000000".getBytes();
         constract.tobytes();
