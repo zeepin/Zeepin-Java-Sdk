@@ -121,7 +121,7 @@ public class WasmVm {
         Constract constract = new Constract();
         constract.setMethod(method);                                         //存入合约调用方法
         constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));       //将合约地址转成byte数组
-        constract.setAgrs(buildWasmContractJsonParam(inputarg));             //将合约参数序列化
+        constract.setArgs(buildWasmContractJsonParam(inputarg));             //将合约参数序列化
         Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);      //构造交易内容 ，constract.tobytes()将constract内容转为byte数组
         sdk.signTx(tx,new Account[][]{{account}});                           //构造签名
 
@@ -139,7 +139,7 @@ public class WasmVm {
         Constract constract = new Constract();
         constract.setMethod(method);
         constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));
-        constract.setAgrs(buildWasmContractJsonParam(inputarg));
+        constract.setArgs(buildWasmContractJsonParam(inputarg));
         Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);
         sdk.signTx(tx,new Account[][]{{account}});
 
@@ -160,7 +160,7 @@ public class WasmVm {
         Constract constract = new Constract();
         constract.setMethod(method);
         constract.setConaddr(Helper.reverse(Helper.hexToBytes(addr)));
-        constract.setAgrs(buildWasmContractJsonParam(inputarg));
+        constract.setArgs(buildWasmContractJsonParam(inputarg));
         Transaction tx = sdk.vm().makeInvokeCodeTransactionWasm(addr,null,constract.tobytes(), payer,gaslimit,gas);
         
         sdk.signTx(tx, new Account[][]{{account}});

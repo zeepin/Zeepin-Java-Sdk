@@ -35,6 +35,7 @@
 package com.github.zeepin.core.transaction;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.*;
 
@@ -98,7 +99,7 @@ public abstract class Transaction extends Inventory {
     				int len = (int) reader.readByte();
     				reader.readBytes(len+38);
     				byte[] ss = reader.readBytes(28);
-    				if(new String(ss).equals("ZeepinChain.Native.Invoke"))
+    				if(new String(ss).contains("ZeepinChain.Native.Invoke"))
     					return true;
     				else
     					return false;    				
