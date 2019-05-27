@@ -51,6 +51,6 @@ public class IntegerItem extends StackItems {
 
     @Override
     public byte[] GetByteArray() {
-        return Helper.BigIntToNeoBytes(value);
+        return Helper.BigIntToNativeBytes(value);
     }
 }

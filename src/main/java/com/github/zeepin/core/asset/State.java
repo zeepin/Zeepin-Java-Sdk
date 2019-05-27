@@ -62,14 +62,14 @@ public class State implements Serializable {
     public void deserialize(BinaryReader reader) throws IOException {
         from = new Address(reader.readVarBytes());
         to = new Address(reader.readVarBytes());
-        value = Helper.BigIntFromNeoBytes(reader.readVarBytes()).longValue();
+        value = Helper.BigIntFromNativeBytes(reader.readVarBytes()).longValue();
     }
 
     @Override
     public void serialize(BinaryWriter writer) throws IOException {
         writer.writeVarBytes(from.toArray());
         writer.writeVarBytes(to.toArray());
-        writer.writeVarBytes(Helper.BigIntToNeoBytes(BigInteger.valueOf(value)));
+        writer.writeVarBytes(Helper.BigIntToNativeBytes(BigInteger.valueOf(value)));
     }
 
     public static State deserializeFrom(byte[] value) throws IOException {

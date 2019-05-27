@@ -40,7 +40,6 @@ package com.github.zeepin.core;
 public enum VmType {
 
     Native(0xff),
-    NEOVM(0x80),
     WASMVM(0x90);
 
     private byte value;

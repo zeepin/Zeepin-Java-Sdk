@@ -36,8 +36,6 @@ package com.github.zeepin.smartcontract.nativevm.abi;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.zeepin.common.Address;
-
 
 public class Struct {
     public List list = new ArrayList();

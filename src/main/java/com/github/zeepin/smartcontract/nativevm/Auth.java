@@ -66,24 +66,6 @@ public class Auth {
         return contractAddress;
     }
 
-    public String sendInit(String adminGId,String password,byte[] salt, String contractAddr,Account payerAcct,long gaslimit,long gasprice) throws Exception {
-        if(adminGId ==null || adminGId.equals("")){
-            throw new SDKException(ErrorCode.ParamErr("parameter should not be null"));
-        }
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        BinaryWriter bw = new BinaryWriter(bos);
-        bw.writeVarBytes(adminGId.getBytes());
-        Transaction tx = sdk.vm().makeInvokeCodeTransaction(contractAddr,"initContractAdmin",null, payerAcct.getAddressU160().toBase58(),gaslimit,gasprice);
-        sdk.signTx(tx,adminGId,password,salt);
-        sdk.addSign(tx,payerAcct);
-        boolean b = sdk.getConnect().sendRawTransaction(tx.toHexString());
-        if (!b) {
-            throw new SDKException(ErrorCode.SendRawTxError);
-        }
-        return tx.hash().toHexString();
-    }
-
-
     /**
      *
      * @param adminGId

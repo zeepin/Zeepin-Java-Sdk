@@ -125,7 +125,7 @@ public class GlobalParamDemo {
             byte[] resbytes = Helper.hexToBytes(res);
             ByteArrayInputStream ms = new ByteArrayInputStream(resbytes);
             BinaryReader reader = new BinaryReader(ms);
-            long paramNum = Helper.BigIntFromNeoBytes(reader.readVarBytes()).longValue();
+            long paramNum = Helper.BigIntFromNativeBytes(reader.readVarBytes()).longValue();
             String key = null;
             String value = null;
             for(int i = 0;i<paramNum;i++){

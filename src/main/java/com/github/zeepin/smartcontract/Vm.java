@@ -101,7 +101,7 @@ public class Vm {
         tx.description = desp;
         return tx;
     }
-    //NEO makeInvokeCodeTransaction
+   //  makeInvokeCodeTransaction
     public InvokeCode makeInvokeCodeTransaction(String codeAddr,String method,byte[] params, String payer,long gaslimit,long gasprice) throws SDKException {
         params = Helper.addBytes(params,new byte[]{0x67});
         params = Helper.addBytes(params, Address.parse(codeAddr).toArray());

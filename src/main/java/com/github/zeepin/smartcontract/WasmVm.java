@@ -42,8 +42,8 @@ import com.github.zeepin.common.ErrorCode;
 import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.transaction.Transaction;
 import com.github.zeepin.sdk.exception.SDKException;
-import com.github.zeepin.smartcontract.neovm.abi.AbiFunction;
-import com.github.zeepin.smartcontract.neovm.abi.BuildParams;
+import com.github.zeepin.smartcontract.nativevm.abi.AbiFunction;
+import com.github.zeepin.smartcontract.nativevm.abi.BuildParams;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,27 +55,6 @@ public class WasmVm {
     private ZPTSdk sdk;
     public WasmVm(ZPTSdk sdk){
         this.sdk = sdk;
-    }
-
-    public String sendTransaction(String contractAddr,String payer, String password,byte[] salt, long gaslimit, long gas, AbiFunction func, boolean preExec) throws Exception {
-        byte[] params = BuildParams.serializeAbiFunction(func);
-        if (preExec) {
-            Transaction tx = sdk.vm().makeInvokeCodeTransaction(contractAddr, null, params, payer, gaslimit,gas);
-            Object obj = (String) sdk.getConnect().sendRawTransactionPreExec(tx.toHexString());
-            String result = ((JSONObject) obj).getString("Result");
-            if (Integer.parseInt(result) == 0) {
-                throw new SDKException(ErrorCode.OtherError("sendRawTransaction PreExec error: "+ obj));
-            }
-            return result;
-        } else {
-            Transaction tx = sdk.vm().makeInvokeCodeTransaction(contractAddr, null, params, payer, gaslimit,gas);
-            sdk.signTx(tx, payer, password,salt);
-            boolean b = sdk.getConnect().sendRawTransaction(tx.toHexString());
-            if (!b) {
-                throw new SDKException(ErrorCode.SendRawTxError);
-            }
-            return tx.hash().toString();
-        }
     }
     
     //将参数对象转化为Json字符串

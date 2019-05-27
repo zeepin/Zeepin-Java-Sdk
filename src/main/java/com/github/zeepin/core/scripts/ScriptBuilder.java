@@ -91,7 +91,7 @@ public class ScriptBuilder implements AutoCloseable {
 //        }
 //        ByteBuffer byteBuffer = ByteBuffer.allocate(Long.BYTES).order(ByteOrder.LITTLE_ENDIAN);
 //        byteBuffer.putLong(number.longValue());
-        byte[] bytes = Helper.BigIntToNeoBytes(number);
+        byte[] bytes = Helper.BigIntToNativeBytes(number);
         return emitPushByteArray(bytes);
     }
 
@@ -102,7 +102,7 @@ public class ScriptBuilder implements AutoCloseable {
             return add(ScriptOp.valueOf(num - 1 + ScriptOp.OP_PUSH1.getByte()));
         }
         BigInteger bint = BigInteger.valueOf(num);
-        return emitPushByteArray(Helper.BigIntToNeoBytes(bint));
+        return emitPushByteArray(Helper.BigIntToNativeBytes(bint));
     }
 
 

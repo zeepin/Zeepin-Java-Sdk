@@ -96,7 +96,7 @@ public abstract class Transaction extends Inventory {
     			try { 				
     				reader.readBytes(94);
     				int len = (int) reader.readByte();
-    				double amount = (double) Helper.BigIntFromNeoBytes(reader.readBytes(len)).intValue();
+    				double amount = (double) Helper.BigIntFromNativeBytes(reader.readBytes(len)).intValue();
     				DecimalFormat format = new DecimalFormat("#.####");
     				return format.format(amount/10000);
     			} catch (IOException ex) {

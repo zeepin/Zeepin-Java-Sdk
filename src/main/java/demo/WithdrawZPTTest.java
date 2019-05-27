@@ -21,19 +21,19 @@ public class WithdrawZPTTest {
             String res = zptSdk.nativevm().governance().getPeerInfoAll();
             JSONObject jsr = JSONObject.parseObject(res);
             System.out.println("it's getPeerInfoAll:"+jsr.toJSONString());
-            System.out.println(Helper.toHexString(account.serializePublicKey()));
-            String[] pubkeyList = new String[1];
-    //        pubkeyList[0] = "02d2592e4f78ee8230ffff2f02d63939fb7045b48d294917033a009702ebb6c88a";
-            pubkeyList[0] = "030f5467d7679ece475d931bcfc7b23d04c4435aad926b8a2cbc0563b6d22c8bc8";
-            
-            long[] withdrawList = new long[1];
-            withdrawList[0] = 10000;
-            
-            VoteInfo res2 = zptSdk.nativevm().governance().getVoteInfo(pubkeyList[0],addr);
-            System.out.println("---"+res2.json());
-            
-            String Hash = zptSdk.nativevm().governance().withdrawZPT(account, pubkeyList, withdrawList, account, 20000, 1);
-            System.out.println(Hash);
+//            System.out.println(Helper.toHexString(account.serializePublicKey()));
+//            String[] pubkeyList = new String[1];
+//    //        pubkeyList[0] = "02d2592e4f78ee8230ffff2f02d63939fb7045b48d294917033a009702ebb6c88a";
+//            pubkeyList[0] = "030f5467d7679ece475d931bcfc7b23d04c4435aad926b8a2cbc0563b6d22c8bc8";
+//            
+//            long[] withdrawList = new long[1];
+//            withdrawList[0] = 10000;
+//            
+//            VoteInfo res2 = zptSdk.nativevm().governance().getVoteInfo(pubkeyList[0],addr);
+//            System.out.println("---"+res2.json());
+//            
+//            String Hash = zptSdk.nativevm().governance().withdrawZPT(account, pubkeyList, withdrawList, account, 20000, 1);
+//            System.out.println(Hash);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,7 +43,8 @@ public class WithdrawZPTTest {
 	}
 
 	public static ZPTSdk getZptSdk() throws Exception {
-		String ip = "http://192.168.199.244";
+//		String ip = "http://192.168.199.244";
+		String ip = "http://127.0.0.1";
 		String restUrl = ip + ":" + "20334";
 		String rpcUrl = ip + ":" + "20336";
 		String wsUrl = ip + ":" + "20335";

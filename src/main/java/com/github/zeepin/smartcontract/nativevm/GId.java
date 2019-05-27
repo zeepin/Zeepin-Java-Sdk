@@ -672,40 +672,40 @@ public class GId {
         return tx;
     }
 
-    /**
-     *
-     * @param Gid
-     * @param newRecoveryGId
-     * @param oldRecoveryGId
-     * @param accounts
-     * @param payerAcct
-     * @param gaslimit
-     * @param gasprice
-     * @return
-     * @throws Exception
-     */
-    private String sendChangeRecovery(String Gid, String newRecoveryGId, String oldRecoveryGId, Account[] accounts, Account payerAcct,long gaslimit, long gasprice) throws Exception {
-        if (Gid == null || Gid.equals("") || accounts == null || accounts.length == 0 || newRecoveryGId == null  || oldRecoveryGId == null  ) {
-            throw new SDKException(ErrorCode.ParamErr("parameter should not be null"));
-        }
-        if (gasprice < 0 || gaslimit < 0) {
-            throw new SDKException(ErrorCode.ParamErr("gas or gaslimit should not be less than 0"));
-        }
-        if (contractAddress == null) {
-            throw new SDKException(ErrorCode.NullCodeHash);
-        }
-        Address newAddr = Address.decodeBase58(newRecoveryGId.replace(Common.didzpt,""));
-        Address oldAddr = Address.decodeBase58(oldRecoveryGId.replace(Common.didzpt,""));
-        byte[] parabytes = NativeBuildParams.buildParams(Gid.getBytes(),newAddr.toArray(),oldAddr.toArray());
-        Transaction tx = sdk.vm().makeInvokeCodeTransaction(contractAddress, "changeRecovery", parabytes, payerAcct.getAddressU160().toBase58(), gaslimit, gasprice);
-        sdk.signTx(tx, new com.github.zeepin.account.Account[][]{accounts});
-        sdk.addSign(tx, payerAcct);
-        boolean b = sdk.getConnect().sendRawTransaction(tx.toHexString());
-        if (b) {
-            return tx.hash().toString();
-        }
-        return null;
-    }
+//    /**
+//     *
+//     * @param Gid
+//     * @param newRecoveryGId
+//     * @param oldRecoveryGId
+//     * @param accounts
+//     * @param payerAcct
+//     * @param gaslimit
+//     * @param gasprice
+//     * @return
+//     * @throws Exception
+//     */
+//    private String sendChangeRecovery(String Gid, String newRecoveryGId, String oldRecoveryGId, Account[] accounts, Account payerAcct,long gaslimit, long gasprice) throws Exception {
+//        if (Gid == null || Gid.equals("") || accounts == null || accounts.length == 0 || newRecoveryGId == null  || oldRecoveryGId == null  ) {
+//            throw new SDKException(ErrorCode.ParamErr("parameter should not be null"));
+//        }
+//        if (gasprice < 0 || gaslimit < 0) {
+//            throw new SDKException(ErrorCode.ParamErr("gas or gaslimit should not be less than 0"));
+//        }
+//        if (contractAddress == null) {
+//            throw new SDKException(ErrorCode.NullCodeHash);
+//        }
+//        Address newAddr = Address.decodeBase58(newRecoveryGId.replace(Common.didzpt,""));
+//        Address oldAddr = Address.decodeBase58(oldRecoveryGId.replace(Common.didzpt,""));
+//        byte[] parabytes = NativeBuildParams.buildParams(Gid.getBytes(),newAddr.toArray(),oldAddr.toArray());
+//        Transaction tx = sdk.vm().makeInvokeCodeTransaction(contractAddress, "changeRecovery", parabytes, payerAcct.getAddressU160().toBase58(), gaslimit, gasprice);
+//        sdk.signTx(tx, new com.github.zeepin.account.Account[][]{accounts});
+//        sdk.addSign(tx, payerAcct);
+//        boolean b = sdk.getConnect().sendRawTransaction(tx.toHexString());
+//        if (b) {
+//            return tx.hash().toString();
+//        }
+//        return null;
+//    }
 
     /**
      * @param Gid

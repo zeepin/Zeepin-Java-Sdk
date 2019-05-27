@@ -108,20 +108,6 @@ public class SignServer {
         return send(req);
     }
 
-    public Object sendSigNeoInvokeTx(String contractAddr, int version, long gasLimit, long gasPrice, Map parameters) throws Exception {
-        Map req = new HashMap();
-        req.put("jsonrpc", "2.0");
-        req.put("method", "sigtransfertx");
-        Map params = new HashMap();
-        params.put("address", contractAddr);
-        params.put("version", version);
-        params.put("gas_limit", gasLimit);
-        params.put("gas_price", gasPrice);
-        params.put("params", parameters);
-        req.put("params", params);
-        req.put("id", 1);
-        return send(req);
-    }
 
     private Object send(Map req) throws Exception {
         Map response = (Map) rpcClient.send(req);

@@ -37,7 +37,7 @@ import com.github.zeepin.common.Address;
 import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.scripts.ScriptOp;
 import com.github.zeepin.io.BinaryWriter;
-import com.github.zeepin.smartcontract.neovm.abi.BuildParams;
+import com.github.zeepin.smartcontract.nativevm.abi.BuildParams;
 
 import demo.vmtest.types.*;
 import demo.vmtest.vm.ExecutionEngine;
@@ -108,7 +108,7 @@ public class Service {
 
     public void runtimeNotify(Config config, ExecutionEngine engine) {
         StackItems item = PushData.PopStackItem(engine);
-        System.out.println("RuntimeNotify:  " + ConvertNeoVmTypeHexString(item));
+        System.out.println("RuntimeNotify:  " + ConvertNativeVmTypeHexString(item));
     }
 
     public void runtimeCheckWitness(Config config, ExecutionEngine engine) {
@@ -216,7 +216,7 @@ public class Service {
         return null;
     }
 
-    private Object ConvertNeoVmTypeHexString(StackItems item) {
+    private Object ConvertNativeVmTypeHexString(StackItems item) {
         if (item == null) {
             return null;
         }
@@ -230,7 +230,7 @@ public class Service {
         } else if (item instanceof ArrayItem) {
             List list = new ArrayList();
             for (int i = 0; i < item.GetArray().length; i++) {
-                Object obj = ConvertNeoVmTypeHexString(item.GetArray()[i]);
+                Object obj = ConvertNativeVmTypeHexString(item.GetArray()[i]);
                 list.add(obj);
             }
             list.set(0, list.get(0) + "(" + new String(Helper.hexToBytes((String) list.get(0))) + ")");
