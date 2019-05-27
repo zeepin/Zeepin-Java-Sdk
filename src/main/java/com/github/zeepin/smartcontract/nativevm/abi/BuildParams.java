@@ -32,16 +32,14 @@
  * along with The ontology.  If not, see <e <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 
-package com.github.zeepin.smartcontract.neovm.abi;
+package com.github.zeepin.smartcontract.nativevm.abi;
 
 import com.alibaba.fastjson.JSON;
 import com.github.zeepin.common.ErrorCode;
 import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.scripts.ScriptBuilder;
-import com.github.zeepin.core.scripts.ScriptOp;
 import com.github.zeepin.sdk.exception.SDKException;
 
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,9 +77,9 @@ public class BuildParams {
                 } else if (val instanceof Boolean) {
                     builder.emitPushBool((Boolean) val);
                 } else if(val instanceof Integer){
-                    builder.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((int)val)));
+                    builder.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((int)val)));
                 } else if (val instanceof Long) {
-                    builder.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((long)val)));
+                    builder.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((long)val)));
                 } else if(val instanceof Map){
                     byte[] bys = getMapBytes(val);
                     System.out.println(Helper.toHexString(bys));
@@ -110,7 +108,7 @@ public class BuildParams {
             sb = new ScriptBuilder();
             List list = ((Struct)val).list;
             sb.add(Type.StructType.getValue());
-            sb.add(Helper.BigIntToNeoBytes(BigInteger.valueOf( list.size())));
+            sb.add(Helper.BigIntToNativeBytes(BigInteger.valueOf( list.size())));
             for (int i = 0; i < list.size(); i++) {
                 if(list.get(i) instanceof byte[]){
                     sb.add(Type.ByteArrayType.getValue());
@@ -120,10 +118,10 @@ public class BuildParams {
                     sb.emitPushByteArray(((String) list.get(i)).getBytes());
                 } else if(list.get(i) instanceof Integer){
                     sb.add(Type.ByteArrayType.getValue());
-                    sb.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((Integer)list.get(i))));
+                    sb.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((Integer)list.get(i))));
                 } else if(list.get(i) instanceof Long){
                     sb.add(Type.ByteArrayType.getValue());
-                    sb.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((Long) list.get(i))));
+                    sb.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((Long) list.get(i))));
                 } else {
                     throw new SDKException(ErrorCode.ParamError);
                 }
@@ -139,7 +137,7 @@ public class BuildParams {
             sb = new ScriptBuilder();
             Map<String,Object> map = (Map)val;
             sb.add(Type.MapType.getValue());
-            sb.add(Helper.BigIntToNeoBytes(BigInteger.valueOf( map.size())));
+            sb.add(Helper.BigIntToNativeBytes(BigInteger.valueOf( map.size())));
             for(Map.Entry e:map.entrySet()){
                 sb.add(Type.ByteArrayType.getValue());
                 sb.emitPushByteArray(((String) e.getKey()).getBytes());
@@ -151,10 +149,10 @@ public class BuildParams {
                     sb.emitPushByteArray(((String) e.getValue()).getBytes());
                 } else if(e.getValue() instanceof Integer){
                     sb.add(Type.IntegerType.getValue());
-                    sb.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((Integer) e.getValue())));
+                    sb.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((Integer) e.getValue())));
                 } else if(e.getValue() instanceof Long){
                     sb.add(Type.IntegerType.getValue());
-                    sb.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((Long) e.getValue())));
+                    sb.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((Long) e.getValue())));
                 } else {
                     throw new SDKException(ErrorCode.ParamError);
                 }
@@ -178,9 +176,9 @@ public class BuildParams {
                 } else if (val instanceof Boolean) {
                     sb.emitPushBool((Boolean) val);
                 } else if(val instanceof Integer){
-                    sb.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((int)val)));
+                    sb.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((int)val)));
                 } else if (val instanceof Long) {
-                    sb.emitPushByteArray(Helper.BigIntToNeoBytes(BigInteger.valueOf((Long) val)));
+                    sb.emitPushByteArray(Helper.BigIntToNativeBytes(BigInteger.valueOf((Long) val)));
                 } else if(val instanceof BigInteger){
                     sb.emitPushInteger((BigInteger)val);
                 } else if(val instanceof Map){

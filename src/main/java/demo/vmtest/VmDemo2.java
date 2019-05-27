@@ -40,9 +40,10 @@ import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.asset.Sig;
 import com.github.zeepin.core.scripts.ScriptOp;
 import com.github.zeepin.crypto.SignatureScheme;
-import com.github.zeepin.smartcontract.neovm.abi.AbiFunction;
-import com.github.zeepin.smartcontract.neovm.abi.AbiInfo;
-import com.github.zeepin.smartcontract.neovm.abi.BuildParams;
+import com.github.zeepin.smartcontract.nativevm.abi.AbiFunction;
+import com.github.zeepin.smartcontract.nativevm.abi.AbiInfo;
+import com.github.zeepin.smartcontract.nativevm.abi.BuildParams;
+
 
 import demo.vmtest.types.BoolItem;
 import demo.vmtest.types.ByteArrayItem;
@@ -162,94 +163,3 @@ codeStr="57c56b6c766b00527ac46c766b51527ac4616c766b51c300c36c766b52527ac46c766b5
     }
 
 }
-
-/*
-
-using Neo.SmartContract.Framework.Services.Neo;
-using Neo.SmartContract.Framework;
-using System;
-using System.ComponentModel;
-using System.Numerics;
-namespace Neo.SmartContract
-{
-    public class HelloWorld : Framework.SmartContract
-    {
-        [DisplayName("transfer")]
-        public static event Action<byte[], byte[], BigInteger> Transferred;
-
-        public static object Main(string operation, params object[] args)
-        {
-            byte[] from = (byte[])args[0];
-            byte[] to = (byte[])args[1];
-			BigInteger value = (BigInteger)args[2];
-            if (!Runtime.CheckWitness(from )) {
-                Runtime.Log("===fail=====");
-               return "no";
-            }
-            return transfer(from,to,value);
-
-        }
-        public static object transfer(byte[] from,byte[] to,BigInteger value){
-            int i = 1 +2;
-
-
-            StorageContext context = Storage.CurrentContext;
-            Storage.Put(context, "result", "-ttest");
-            byte[] v = Storage.Get(context, "result");
-            Runtime.Log("==success=====");
-
-
-            Transferred(from, to, value);
-            return v.AsString();
-        }
-
-    }
-}
-
-
-
-
-using Neo.SmartContract.Framework;
-using Neo.SmartContract.Framework.Services.Neo;
-using Neo.SmartContract.Framework.Services.System;
-using System;
-using System.ComponentModel;
-using System.Numerics;
-using System.Text;
-using Helper = Neo.SmartContract.Framework.Helper;
-
-namespace DID
-{
-    public class DID : SmartContract
-    {
-        public static Object Main(string operation, params object[] args)
-        {
-           // Runtime.Log("start Main");
-           // if (operation == "DeserializeMap") {
-                DeserializeMap((byte[])args[0], (byte[])args[1]);
-           // }
-
-            return 9;
-        }
-         public static object SerializeMap(byte[] param, byte[] param1)
-         {
-            Map<string, string> m = new Map<string, string>();
-            m["key"] = "world";
-
-            byte[] b = Helper.Serialize(m);
-            return b;
-         }
-
-        public static object DeserializeMap(byte[] param, byte[] param1)
-        {
-           // Runtime.Log("start DeserializeMap");
-            Map<string, string> b1 = (Map<string, string>)Helper.Deserialize(param);
-            string key = b1["key"];
-            return key;
-        }
-
-
-    }
-}
-
- */

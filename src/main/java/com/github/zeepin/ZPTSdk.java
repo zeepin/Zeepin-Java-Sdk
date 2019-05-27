@@ -37,7 +37,6 @@ package com.github.zeepin;
 import com.github.zeepin.account.Account;
 import com.github.zeepin.common.Common;
 import com.github.zeepin.common.ErrorCode;
-import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.DataSignature;
 import com.github.zeepin.core.asset.Sig;
 import com.github.zeepin.core.program.Program;
@@ -47,7 +46,6 @@ import com.github.zeepin.crypto.SignatureScheme;
 import com.github.zeepin.sdk.exception.SDKException;
 import com.github.zeepin.sdk.manager.*;
 import com.github.zeepin.smartcontract.NativeVm;
-import com.github.zeepin.smartcontract.NeoVm;
 import com.github.zeepin.smartcontract.Vm;
 import com.github.zeepin.smartcontract.WasmVm;
 
@@ -65,7 +63,6 @@ public class ZPTSdk {
 
     private Vm vm = null;
     private NativeVm nativevm = null;
-    private NeoVm neovm = null;
     private WasmVm wasmvm = null;
     private SignServer signServer = null;
 
@@ -95,13 +92,7 @@ public class ZPTSdk {
         }
         return nativevm;
     }
-    public NeoVm neovm() {
-        if(neovm == null){
-            vm();
-            neovm = new NeoVm(getInstance());
-        }
-        return neovm;
-    }
+    
     public WasmVm wasmvm() {
         if(wasmvm == null){
             vm();

@@ -42,8 +42,8 @@ import com.github.zeepin.common.ErrorCode;
 import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.transaction.Transaction;
 import com.github.zeepin.sdk.exception.SDKException;
-import com.github.zeepin.smartcontract.neovm.abi.AbiFunction;
-import com.github.zeepin.smartcontract.neovm.abi.BuildParams;
+import com.github.zeepin.smartcontract.nativevm.abi.AbiFunction;
+import com.github.zeepin.smartcontract.nativevm.abi.BuildParams;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -171,7 +171,6 @@ public class WASMTest {
 
   wm.openWalletFile("wallet.dat");
 
-  // wm.neovm().record().setContractAddress("80f6bff7645a84298a1a52aa3745f84dba6615cf");
   return wm;
  }
 }

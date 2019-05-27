@@ -45,8 +45,8 @@ import com.github.zeepin.network.websocket.Result;
 import com.github.zeepin.sdk.wallet.Account;
 import com.github.zeepin.sdk.wallet.Identity;
 import com.github.zeepin.sdk.wallet.Wallet;
-import com.github.zeepin.smartcontract.neovm.abi.AbiFunction;
-import com.github.zeepin.smartcontract.neovm.abi.AbiInfo;
+import com.github.zeepin.smartcontract.nativevm.abi.AbiFunction;
+import com.github.zeepin.smartcontract.nativevm.abi.AbiInfo;
 import com.alibaba.fastjson.JSON;
 
 import java.io.FileInputStream;
@@ -85,13 +85,6 @@ public class WebsocketDemo {
             //System.exit(0);
 
             //System.out.println("================register=================");
-//            Identity ident = null;
-//            if (zptSdk.getWalletMgr().getIdentitys().size() == 0) {
-//                ident = zptSdk.neovm().GId().sendRegister("passwordtest","payer",0);
-//            } else {
-//                ident = zptSdk.getWalletMgr().getIdentitys().get(0);
-//            }
-
 
 
             for (int i = 0; i >= 0; i++) {

@@ -65,7 +65,7 @@ public class Helper {
         return result;
     }
 
-    public static byte[] BigIntToNeoBytes(BigInteger data){
+    public static byte[] BigIntToNativeBytes(BigInteger data){
         byte[] bs = data.toByteArray();
         if(bs.length == 0) {
             return new byte[]{};
@@ -98,7 +98,7 @@ public class Helper {
         }
     }
 
-    public static BigInteger BigIntFromNeoBytes(byte[] ba){
+    public static BigInteger BigIntFromNativeBytes(byte[] ba){
         if(ba.length == 0){
             return BigInteger.valueOf(0);
         }

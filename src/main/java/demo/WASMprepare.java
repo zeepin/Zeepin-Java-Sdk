@@ -28,7 +28,6 @@ public class WASMprepare {
 
 
 
-          //String hash = ontSdk.neovm().record().sendPut(id.ontid, "passwordtest", new byte[]{}, "key", "value-test", 0, 0);
 
             List<String> arg1 = new ArrayList<>();
             arg1.add("haha");
@@ -77,7 +76,6 @@ public class WASMprepare {
 
         wm.openWalletFile("wallet.dat");
 
-      //  wm.neovm().record().setContractAddress("80f6bff7645a84298a1a52aa3745f84dba6615cf");
         return wm;
     }
 }

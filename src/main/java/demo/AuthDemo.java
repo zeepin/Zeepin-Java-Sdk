@@ -32,19 +32,12 @@
  * along with The ontology.  If not, see <e <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package demo;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.zeepin.ZPTSdk;
 import com.github.zeepin.common.Address;
 import com.github.zeepin.common.Helper;
-import com.github.zeepin.core.transaction.Transaction;
 import com.github.zeepin.sdk.wallet.Account;
 import com.github.zeepin.sdk.wallet.Identity;
-import com.github.zeepin.smartcontract.neovm.abi.AbiFunction;
-import com.github.zeepin.smartcontract.neovm.abi.AbiInfo;
-import com.github.zeepin.smartcontract.neovm.abi.BuildParams;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AuthDemo {
@@ -133,17 +126,6 @@ public class AuthDemo {
             System.out.println(Helper.toHexString(account.getAddressU160().toArray()));
             System.out.println(Helper.toHexString(identity.gid.getBytes()));
 
-            if(false){
-                AbiInfo abiinfo = JSON.parseObject(abi, AbiInfo.class);
-                String name = "init";
-                AbiFunction func = abiinfo.getFunction(name);
-                func.name = name;
-                System.out.println(func);
-                func.setParamsValue();
-                //Object obj =  zptSdk.neovm().sendTransaction(Helper.reverse(contractAddr),null,null,0,0,func, true);
-                Object obj =  zptSdk.neovm().sendTransaction(Helper.reverse(contractAddr),acct0,acct0,30000,0,func, false);
-                System.out.println(obj);
-            }
 
             if(false){
 
@@ -168,19 +150,6 @@ public class AuthDemo {
             }
             if(true){
                 zptSdk.nativevm().auth().queryAuth(contractAddr,identity2.gid);
-            }
-            if(false){
-                AbiInfo abiinfo = JSON.parseObject(abi, AbiInfo.class);
-                String name = "foo";
-                AbiFunction func = abiinfo.getFunction(name);
-                func.name = name;
-                System.out.println(func);
-                func.setParamsValue(identity2.gid.getBytes(),Long.valueOf(1));
-
-                acct0 = zptSdk.getWalletMgr().getAccount(identity2.gid,password,identity2.controls.get(0).getSalt());
-                System.out.println("pk:"+Helper.toHexString(acct0.serializePublicKey()));
-                Object obj =  zptSdk.neovm().sendTransaction(Helper.reverse(contractAddr),acct0,account,30000,0,func, true);
-                System.out.println(obj);
             }
 
         } catch (Exception e) {

@@ -42,7 +42,6 @@ import com.github.zeepin.core.payload.DeployCode;
 import com.github.zeepin.core.payload.InvokeCode;
 import com.github.zeepin.core.scripts.ScriptBuilder;
 import com.github.zeepin.core.scripts.ScriptOp;
-import com.github.zeepin.core.transaction.Attribute;
 import com.github.zeepin.core.transaction.Transaction;
 import com.github.zeepin.sdk.exception.SDKException;
 
@@ -101,7 +100,7 @@ public class Vm {
         tx.description = desp;
         return tx;
     }
-    //NEO makeInvokeCodeTransaction
+    // makeInvokeCodeTransaction
     public InvokeCode makeInvokeCodeTransaction(String codeAddr,String method,byte[] params, String payer,long gaslimit,long gasprice) throws SDKException {
         params = Helper.addBytes(params,new byte[]{0x67});
         params = Helper.addBytes(params, Address.parse(codeAddr).toArray());

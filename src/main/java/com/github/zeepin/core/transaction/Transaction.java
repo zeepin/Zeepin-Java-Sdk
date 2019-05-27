@@ -37,9 +37,7 @@ package com.github.zeepin.core.transaction;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.*;
 
-import com.alibaba.fastjson.JSON;
 import com.github.zeepin.common.*;
 import com.github.zeepin.core.Inventory;
 import com.github.zeepin.core.InventoryType;
@@ -142,7 +140,7 @@ public abstract class Transaction extends Inventory {
     			try { 				
     				reader.readBytes(94);
     				int len = (int) reader.readByte();
-    				double amount = Double.parseDouble(Helper.BigIntFromNeoBytes(reader.readBytes(len)).toString());
+    				double amount = Double.parseDouble(Helper.BigIntFromNativeBytes(reader.readBytes(len)).toString());
     				DecimalFormat format = new DecimalFormat("#.####");
     				return format.format(amount/10000);
     			} catch (IOException ex) {

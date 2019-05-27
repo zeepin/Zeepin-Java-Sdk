@@ -110,16 +110,7 @@ public class ClaimRecordTxDemo {
 
             System.out.println("ClaimId:" + payload.getString("jti"));
 
-//            zptSdk.neovm().claimRecord().setContractAddress("9a4c79ee4379a0b5d10db03553ca7e61e17a8977");
-            //
-//            String getstatusRes9 = zptSdk.neovm().claimRecord().sendGetStatus(payload.getString("jti"));
-//            System.out.println("getstatusResBytes:" + getstatusRes9);
-
-            String commitHash = zptSdk.neovm().claimRecord().sendCommit(dids.get(0).gid,password,dids.get(0).controls.get(0).getSalt(),dids.get(1).gid,payload.getString("jti"),account1,zptSdk.DEFAULT_GAS_LIMIT,0);
-            System.out.println("commitRes:" + commitHash);
-            Thread.sleep(6000);
-            Object obj = zptSdk.getConnect().getSmartCodeEvent(commitHash);
-            System.out.println(obj);
+     
 
 
             System.out.println(Helper.toHexString(dids.get(0).gid.getBytes()));
@@ -128,23 +119,6 @@ public class ClaimRecordTxDemo {
             System.out.println(payload.getString("jti"));
 
 
-            String getstatusRes = zptSdk.neovm().claimRecord().sendGetStatus(payload.getString("jti"));
-            System.out.println("getstatusResBytes:" + getstatusRes);
-            Thread.sleep(6000);
-
-//            System.exit(0);
-
-            String revokeHash = zptSdk.neovm().claimRecord().sendRevoke(dids.get(0).gid,password,dids.get(0).controls.get(0).getSalt(),payload.getString("jti"),account1,zptSdk.DEFAULT_GAS_LIMIT,0);
-            System.out.println("revokeRes:" + revokeHash);
-            Thread.sleep(6000);
-            System.out.println(zptSdk.getConnect().getSmartCodeEvent(revokeHash));
-
-
-            String getstatusRes2 = zptSdk.neovm().claimRecord().sendGetStatus(payload.getString("jti"));
-
-            System.out.println("getstatusResBytes2:" + getstatusRes2);
-
-            System.exit(0);
 
 
 //            boolean b = zptSdk.getGIdTx().verifyGIdClaim(claim);
