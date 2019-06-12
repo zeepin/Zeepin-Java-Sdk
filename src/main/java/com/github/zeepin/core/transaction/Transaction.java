@@ -37,9 +37,7 @@ package com.github.zeepin.core.transaction;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.*;
 
-import com.alibaba.fastjson.JSON;
 import com.github.zeepin.common.*;
 import com.github.zeepin.core.Inventory;
 import com.github.zeepin.core.InventoryType;
@@ -62,6 +60,96 @@ public abstract class Transaction extends Inventory {
     public Sig[] sigs = new Sig[0];
     protected Transaction(TransactionType type) {
         this.txType = type;
+    }
+    
+    public static Transaction deserializeTxString(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try {
+    				byte ver = reader.readByte();
+    				TransactionType type = TransactionType.valueOf(reader.readByte());
+    	            String typeName = "com.github.zeepin.core.payload." + type.toString();
+    	            Transaction transaction = (Transaction) Class.forName(typeName).newInstance();
+    	            transaction.version = ver;
+    	            transaction.nonce = reader.readInt();
+    	            transaction.gasPrice = reader.readLong();
+    	            transaction.gasLimit = reader.readLong();
+    	            transaction.payer = reader.readSerializable(Address.class);
+    	            transaction.deserializeExclusiveData(reader);
+    	            transaction.attributes = reader.readByte();
+    	            transaction.sigs = new Sig[(int) reader.readVarInt()];   	            
+    	            for (int i = 0; i < transaction.sigs.length; i++) {
+    	                transaction.sigs[i] = reader.readSerializable(Sig.class);
+    	            }            
+    	            return transaction;
+    			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static boolean isNative(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try {
+    				reader.readBytes(94);
+    				int len = (int) reader.readByte();
+    				if(len > 80)
+    					len = 0;
+    				reader.readBytes(len+38);
+    				byte[] ss = reader.readBytes(28);
+    				if(new String(ss).contains("ZeepinChain.Native.Invoke"))
+    					return true;
+    				else
+    					return false;    				
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static boolean isZptTx(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try {
+    				reader.readBytes(94);
+    				int len = (int) reader.readByte();
+    				if(len > 80)
+    					len = 0;
+    				reader.readBytes(len+35);
+    				int flag = (int) reader.readByte();
+    				if(flag == 1)
+    					return true;
+    				else
+    					return false;
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
+    }
+    
+    public static boolean isGalaTx(byte[] value) throws IOException {
+    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
+    		try (BinaryReader reader = new BinaryReader(ms)) {
+    			try {
+    				reader.readBytes(94);
+    				int len = (int) reader.readByte();
+    				if(len > 80)
+    					len = 0;
+    				reader.readBytes(len+35);
+    				int flag = (int) reader.readByte();
+    				if(flag == 2)
+    					return true;
+    				else
+    					return false;			
+    			} catch (IOException ex) {
+    	            throw new IOException(ex);
+    	        }
+    		}
+    	}
     }
     
     public static String getNativeFromAddr(byte[] value) throws IOException {
@@ -96,7 +184,11 @@ public abstract class Transaction extends Inventory {
     			try { 				
     				reader.readBytes(94);
     				int len = (int) reader.readByte();
-    				double amount = (double) Helper.BigIntFromNativeBytes(reader.readBytes(len)).intValue();
+    				double amount;
+    				if(len > 80)
+    					amount = len - 80;
+    				else
+    					amount = Double.parseDouble(Helper.BigIntFromNativeBytes(reader.readBytes(len)).toString());
     				DecimalFormat format = new DecimalFormat("#.####");
     				return format.format(amount/10000);
     			} catch (IOException ex) {
@@ -178,33 +270,6 @@ public abstract class Transaction extends Inventory {
     	}
     }
 
-    public static Transaction deserializeTxString(byte[] value) throws IOException {
-    	try (ByteArrayInputStream ms = new ByteArrayInputStream(value, 0, value.length)) {
-    		try (BinaryReader reader = new BinaryReader(ms)) {
-    			try {
-    				byte ver = reader.readByte();
-    				TransactionType type = TransactionType.valueOf(reader.readByte());
-    	            String typeName = "com.github.zeepin.core.payload." + type.toString();
-    	            Transaction transaction = (Transaction) Class.forName(typeName).newInstance();
-    	            transaction.version = ver;
-    	            transaction.nonce = reader.readInt();
-    	            transaction.gasPrice = reader.readLong();
-    	            transaction.gasLimit = reader.readLong();
-    	            transaction.payer = reader.readSerializable(Address.class);
-    	            transaction.deserializeExclusiveData(reader);
-    	            transaction.attributes = reader.readByte();
-    	            transaction.sigs = new Sig[(int) reader.readVarInt()];   	            
-    	            for (int i = 0; i < transaction.sigs.length; i++) {
-    	                transaction.sigs[i] = reader.readSerializable(Sig.class);
-    	            }            
-    	            return transaction;
-    			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-    	            throw new IOException(ex);
-    	        }
-    		}
-    	}
-    }
-    
     public static Transaction deserializeFrom(byte[] value) throws IOException {
         return deserializeFrom(value, 0);
     }

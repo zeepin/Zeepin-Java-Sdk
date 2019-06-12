@@ -42,11 +42,7 @@ import com.github.zeepin.common.Helper;
 import com.github.zeepin.core.DataSignature;
 import com.github.zeepin.crypto.Digest;
 import com.github.zeepin.crypto.SignatureScheme;
-import com.github.zeepin.sdk.wallet.Identity;
 
-import sun.misc.BASE64Encoder;
-
-import java.security.spec.AlgorithmParameterSpec;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
