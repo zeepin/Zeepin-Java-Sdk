@@ -15,16 +15,16 @@ public class WASMprepare {
 
     public static void main(String[] args) {
         try {
-            ZPTSdk ontSdk = getZPTSdk();
+            ZPTSdk zptSdk = getZPTSdk();
 
-      /*      if (ontSdk.getWalletMgr().getWallet().getIdentities().size() < 1) {
+      /*      if (zptSdk.getWalletMgr().getWallet().getIdentities().size() < 1) {
 
-                ontSdk.getWalletMgr().createIdentity("passwordtest");
-                ontSdk.getWalletMgr().writeWallet();
+                zptSdk.getWalletMgr().createIdentity("passwordtest");
+                zptSdk.getWalletMgr().writeWallet();
             }
 */
 
-          /*  Identity id = ontSdk.getWalletMgr().getWallet().getIdentities().get(0);*/
+          /*  Identity id = zptSdk.getWalletMgr().getWallet().getIdentities().get(0);*/
 
 
 
@@ -33,23 +33,23 @@ public class WASMprepare {
             arg1.add("haha");
 //    //        arg1.add("eee");
 //
-            com.github.zeepin.account.Account  accountTest=ontSdk.getWalletMgr().getAccount("ZEuzshrCsE1cnvPuuRrDYgnVYNDtyt5d3X","11");
+            com.github.zeepin.account.Account  accountTest=zptSdk.getWalletMgr().getAccount("ZEuzshrCsE1cnvPuuRrDYgnVYNDtyt5d3X","11");
            String addr= accountTest.getAddressU160().toBase58();
             List<String> arg2 = new ArrayList<>();
             arg2.add("haha");
 //
-//         String testPreExc=   ontSdk.wasmvm().sendWasmTransactionPrepareExc("init","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),b,20000000,20000000,accountTest);
+//         String testPreExc=   zptSdk.wasmvm().sendWasmTransactionPrepareExc("init","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),b,20000000,20000000,accountTest);
 //           // String kkk=new String(Helper.hexToBytes(bbbpre.getString("Result")));
 //         System.out.println(testPreExc);
 
-          String bbb=   ontSdk.wasmvm().sendWasmTransaction("addStorage","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),addr,20000000,20000000,accountTest);
-         long kkkk=   ontSdk.nativevm().zpt().queryBalanceOf(accountTest.getAddressU160().toBase58());
+          String bbb=   zptSdk.wasmvm().sendWasmTransaction("addStorage","acc8506f157d1175c02d19b76432f61c2b98be66", arg1.toArray(),addr,20000000,20000000,accountTest);
+         long kkkk=   zptSdk.nativevm().zpt().queryBalanceOf(accountTest.getAddressU160().toBase58());
          System.out.println(bbb);
          Thread.sleep(10*1000);
-         String aaa= ontSdk.wasmvm().sendWasmTransaction("getStorage","acc8506f157d1175c02d19b76432f61c2b98be66",arg2.toArray(),addr,20000000,20000000,accountTest);
+         String aaa= zptSdk.wasmvm().sendWasmTransaction("getStorage","acc8506f157d1175c02d19b76432f61c2b98be66",arg2.toArray(),addr,20000000,20000000,accountTest);
 
             System.out.println(aaa);
-           JSONObject A =(JSONObject) ontSdk.getRestful().getSmartCodeEvent(aaa);
+           JSONObject A =(JSONObject) zptSdk.getRestful().getSmartCodeEvent(aaa);
            System.out.println(A.toJSONString());
         } catch (Exception e) {
             e.printStackTrace();
